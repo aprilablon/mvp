@@ -4,11 +4,16 @@ var request = require('request');
 var bodyParser = require('body-parser');
 var db = require('../data/index');
 var URL = require('url').URL;
+var fs = require('fs');
 
 var app = express();
 
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/../client/dist'));
+
+app.get('', function(req, res) {
+  AIzaSyB5J6UIl5j3F01QdwCN01ow7BtMY9OqVjY
+})
 
 app.post('/launches', function(req, res) {
 
@@ -56,11 +61,16 @@ app.post('/launches', function(req, res) {
         description = missions.description;
       }
 
+      var mapsQuery = data[i].location.name.replace(', ', ',').replace(', ', ',').split(' ').join('+');
+
+      var map = `https://www.google.com/maps/embed/v1/place?key=AIzaSyB5J6UIl5j3F01QdwCN01ow7BtMY9OqVjY&q=${mapsQuery}`
+
       var launchInstance = new db({
         name: data[i].name,
         starttime: data[i].windowstart,
         embedurl: embedurl,
         location: data[i].location.name,
+        map: map,
         agency: data[i].rocket.agencies[0].name,
         description: description
       })
@@ -100,6 +110,16 @@ app.get('/launches/next', function(req, res) {
   query.exec(function(err, data) {
     if (err) {
       console.log('Error in reading from database: ', err);
+      throw err;
+    }
+    res.send(data);
+  })
+});
+
+app.get('/styles.css', function(req, res) {
+  fs.readFile('styles.css', function(err, data) {
+    if (err) {
+      console.log('Error in reading CSS file: ', err);
       throw err;
     }
     res.send(data);
