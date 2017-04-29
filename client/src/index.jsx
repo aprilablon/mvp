@@ -9,17 +9,21 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      launches: [{a: 1}, {b: 2}]
+      count: 0,
+      launches: [],
+      currentLaunch: {}
     }
   }
 
-  loadLaunchData(callback) {
+  postLaunchData(callback) {
+    var context = this;
+
     $.ajax({
-      type: 'GET',
+      type: 'POST',
       url: 'http://127.0.0.1:3000/launches',
-      success: function(data) {
-        console.log('Sucessful POST request');
-        callback(data);
+      success: function() {
+        console.log('Successful POST request');
+        context.getLaunchData(callback);
       },
       error: function() {
         console.log('Bad POST request');
@@ -27,23 +31,71 @@ class App extends React.Component {
     })
   }
 
-  setLaunchData(data) {
-    this.setState({
-      launches: data
+  getLaunchData(callback) {
+    $.ajax({
+      type: 'GET',
+      url: 'http://127.0.0.1:3000/launches',
+      success: function(data) {
+        console.log('Successful GET request');
+        callback(data);
+      },
+      error: function() {
+        console.log('Bad GET request');
+      }
     })
   }
 
+  setLaunchData(data) {
+    this.setState({
+      launches: data,
+      currentLaunch: data[this.state.count]
+    })
+    console.log(this.state);
+  }
+
   componentDidMount() {
-    this.loadLaunchData(this.setLaunchData.bind(this));
+    this.postLaunchData(this.setLaunchData.bind(this));
+  }
+
+  clickNext(event) {
+    if (this.state.count < this.state.launches.length) {
+      this.setState({
+        count: this.state.count++
+      });
+      console.log('NEXT: ', this.state.count);
+
+      this.setState({
+        currentLaunch: this.state.launches[this.state.count]
+      })
+    }
+  }
+
+  clickPrevious(event) {
+    if (this.state.count > 0) {
+      this.setState({
+        count: this.state.count--
+      });
+      console.log('PREVIOUS: ', this.state.count);
+
+      this.setState({
+        currentLaunch: this.state.launches[this.state.count]
+      })
+    }
   }
 
   render() {
     return (
       <div>
-        <LaunchList launches={this.state.launches} />
+        <button type="button" onClick={this.clickPrevious.bind(this )}>Previous</button>
+        <button type="button" onClick={this.clickNext.bind(this)}>Next</button>
+        <LaunchList currentLaunch={this.state.currentLaunch} />
       </div>
     )
   }
 }
 
 ReactDOM.render(<App />, document.getElementById('app'));
+        
+
+
+        // <LaunchList launches={this.state.launches} />
