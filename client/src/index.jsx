@@ -100,23 +100,25 @@ class App extends React.Component {
   render() {
     if (this.state.landingPage) {
       return (
-        <div>
+        <div className="centered-text">
           <p>Show me:</p>
-          <button type="button" onClick={this.clickFalcon.bind(this)}>FALCONS</button>
-          <button type="button" onClick={this.clickNextNum.bind(this)}>NEXT LAUNCHES</button>
+          <div>
+            <button type="button" onClick={this.clickFalcon.bind(this)}>FALCONS</button>
+            <button type="button" onClick={this.clickNextNum.bind(this)}>NEXT LAUNCHES</button>
+          </div>
         </div>
       )
     }
     return (
-      <div>
+      <div className="centered-text">
+        <p>Show me:</p>
         <div>
-          <p>Show me:</p>
           <button type="button" onClick={this.clickFalcon.bind(this)}>FALCONS</button>
           <button type="button" onClick={this.clickNextNum.bind(this)}>NEXT LAUNCHES</button>
         </div>
+        <p>Page: {this.state.count + 1}</p>
+        <p>Number of Launches: {this.state.launches.length}</p>
         <div>
-          <p>Page: {this.state.count + 1}</p>
-          <p>Number of Launches: {this.state.launches.length}</p>
           <button type="button" onClick={this.clickPrevious.bind(this)}>Previous</button>
           <button type="button" onClick={this.clickNext.bind(this)}>Next</button>
         </div>
