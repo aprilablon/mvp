@@ -12,7 +12,8 @@ class App extends React.Component {
     this.state = {
       count: 0,
       launches: [],
-      currentLaunch: {}
+      currentLaunch: {},
+      landingPage: true
     }
   }
 
@@ -35,9 +36,11 @@ class App extends React.Component {
   }
 
   getLaunchData(callback, query) {
+    var path = query.split('/')[0];
+    // console.log('GET path: ', path);
     $.ajax({
       type: 'GET',
-      url: `http://127.0.0.1:3000/launches/${query}`,
+      url: `http://127.0.0.1:3000/launches/${path}`,
       success: function(data) {
         console.log('Successful GET request');
         callback(data);
@@ -50,62 +53,70 @@ class App extends React.Component {
 
   setLaunchData(data) {
     this.setState({
+      count: 0,
       launches: data,
-      currentLaunch: data[this.state.count]
+      currentLaunch: data[0]
     })
-    // console.log(this.state);
-  }
-
-  componentDidMount() {
-    this.postLaunchData(this.setLaunchData.bind(this), 'next/5');
+    // console.log('SET state: ', this.state);
   }
 
   clickFalcon(event) {
     this.postLaunchData(this.setLaunchData.bind(this), 'falcon');
+    this.setState({
+      landingPage: false
+    })
+    // console.log('FALCON state: ', this.state);
   }
 
   clickNextNum(event) {
-    this.postLaunchData(this.setLaunchData.bind(this), 'next/5');
+    var number = prompt("How many future launches do you wanna see?");
+    this.postLaunchData(this.setLaunchData.bind(this), `next/${number}`);
+    this.setState({
+      landingPage: false
+    })
+    // console.log('NEXT NUM state: ', this.state);
   }
 
   clickNext(event) {
-    // console.log('NEXT length: ', this.state.launches.length);
     if (this.state.count < this.state.launches.length - 1) {
-      // console.log('NEXT before: ', this.state);
       var updateCount = this.state.count + 1;
-      // console.log('NEXT updateCount: ', updateCount);
       this.setState({
         count: updateCount,
         currentLaunch: this.state.launches[updateCount]
       })
-      // console.log('NEXT after: ', this.state);
     }
   }
 
   clickPrevious(event) {
-    // console.log('PREVIOUS length: ', this.state.launches.length);
     if (this.state.count > 0) {
-      // console.log('PREVIOUS before: ', this.state);
       var updateCount = this.state.count - 1;
-      // console.log('PREVIOUS updateCount: ', updateCount);
       this.setState({
         count: updateCount,
         currentLaunch: this.state.launches[updateCount]
       })
-      // console.log('PREVIOUS after: ', this.state);
     }
   }
 
   render() {
+    if (this.state.landingPage) {
+      return (
+        <div>
+          <p>Show me:</p>
+          <button type="button" onClick={this.clickFalcon.bind(this)}>FALCONS</button>
+          <button type="button" onClick={this.clickNextNum.bind(this)}>NEXT LAUNCHES</button>
+        </div>
+      )
+    }
     return (
       <div>
         <div>
           <p>Show me:</p>
           <button type="button" onClick={this.clickFalcon.bind(this)}>FALCONS</button>
-          <button type="button" onClick={this.clickNextNum.bind(this)}>NEXT 5 LAUNCHES</button>
+          <button type="button" onClick={this.clickNextNum.bind(this)}>NEXT LAUNCHES</button>
         </div>
         <div>
-        <p>Page {this.state.count + 1}</p>
+          <p>Page: {this.state.count + 1}</p>
+          <p>Number of Launches: {this.state.launches.length}</p>
           <button type="button" onClick={this.clickPrevious.bind(this)}>Previous</button>
           <button type="button" onClick={this.clickNext.bind(this)}>Next</button>
         </div>
