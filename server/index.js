@@ -9,7 +9,7 @@ var app = express();
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/../client/dist'));
 
-app.post('/', function(req, res) {
+app.post('/launches', function(req, res) {
 
   console.log('Starting POST request...');
 
@@ -35,19 +35,25 @@ app.post('/', function(req, res) {
     for (var i = 0; i < data.length; i++) {
 
       var videourl = data[i].vidURLs[0] || null;
+      var missions = data[i].missions[0]|| null;
+
+      var description = null;
+      if (missions) {
+        description = missions.description;
+      }
 
       var launchInstance = new db({
         name: data[i].name,
         starttime: data[i].windowstart,
         videourl: videourl,
-        location: data[i].location.pads[0].name,
-        agency: data[i].rocket.agencies.name,
-        description: data[i].missions.description
+        location: data[i].location.name,
+        agency: data[i].rocket.agencies[0].name,
+        description: description
       })
 
       launchInstance.save(function(err) {
         if (err) {
-          console.log('Error in saving to database: ', err);
+          console.log('Error in writing to database (ignore if specifying duplicates): ', err);
         }
       });
     }
@@ -57,6 +63,16 @@ app.post('/', function(req, res) {
 });
 
 app.get('/launches', function(req, res) {
+
+  var query = db.find();
+
+  query.exec(function(err, data) {
+    if (err) {
+      console.log('Error in reading from database: ', err);
+      throw err;
+    }
+    res.send(data);
+  })
 
 });
 
