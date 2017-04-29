@@ -50,7 +50,7 @@ class App extends React.Component {
       launches: data,
       currentLaunch: data[this.state.count]
     })
-    console.log(this.state);
+    // console.log(this.state);
   }
 
   componentDidMount() {
@@ -58,28 +58,31 @@ class App extends React.Component {
   }
 
   clickNext(event) {
-    if (this.state.count < this.state.launches.length) {
+    // console.log('NEXT length: ', this.state.launches.length);
+    if (this.state.count < this.state.launches.length - 1) {
+      // console.log('NEXT before: ', this.state);
+      var updateCount = this.state.count + 1;
+      // console.log('NEXT updateCount: ', updateCount);
       this.setState({
-        count: this.state.count++
-      });
-      console.log('NEXT: ', this.state.count);
-
-      this.setState({
-        currentLaunch: this.state.launches[this.state.count]
+        count: updateCount,
+        currentLaunch: this.state.launches[updateCount]
       })
+      // console.log('NEXT after: ', this.state);
     }
   }
 
   clickPrevious(event) {
+    // console.log('PREVIOUS length: ', this.state.launches.length);
     if (this.state.count > 0) {
+      // console.log('PREVIOUS before: ', this.state);
+      var updateCount = this.state.count - 1;
+      // console.log('PREVIOUS updateCount: ', updateCount);
       this.setState({
-        count: this.state.count--
-      });
-      console.log('PREVIOUS: ', this.state.count);
-
-      this.setState({
-        currentLaunch: this.state.launches[this.state.count]
+        count: updateCount,
+        currentLaunch: this.state.launches[updateCount]
       })
+
+      // console.log('PREVIOUS after: ', this.state);
     }
   }
 
