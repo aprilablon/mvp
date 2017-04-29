@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import LaunchList from './components/LaunchList.jsx';
+import LaunchListEntry from './components/LaunchListEntry.jsx';
 
 class App extends React.Component {
   
@@ -15,15 +16,17 @@ class App extends React.Component {
     }
   }
 
-  postLaunchData(callback) {
+  postLaunchData(callback, query) {
     var context = this;
 
     $.ajax({
       type: 'POST',
       url: 'http://127.0.0.1:3000/launches',
+      data: JSON.stringify({ query }),
+      contentType: 'application/json',
       success: function() {
         console.log('Successful POST request');
-        context.getLaunchData(callback);
+        context.getLaunchData(callback, query);
       },
       error: function() {
         console.log('Bad POST request');
@@ -31,10 +34,10 @@ class App extends React.Component {
     })
   }
 
-  getLaunchData(callback) {
+  getLaunchData(callback, query) {
     $.ajax({
       type: 'GET',
-      url: 'http://127.0.0.1:3000/launches',
+      url: `http://127.0.0.1:3000/launches/${query}`,
       success: function(data) {
         console.log('Successful GET request');
         callback(data);
@@ -54,7 +57,15 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.postLaunchData(this.setLaunchData.bind(this));
+    this.postLaunchData(this.setLaunchData.bind(this), 'next/5');
+  }
+
+  clickFalcon(event) {
+    this.postLaunchData(this.setLaunchData.bind(this), 'falcon');
+  }
+
+  clickNextNum(event) {
+    this.postLaunchData(this.setLaunchData.bind(this), 'next/5');
   }
 
   clickNext(event) {
@@ -81,7 +92,6 @@ class App extends React.Component {
         count: updateCount,
         currentLaunch: this.state.launches[updateCount]
       })
-
       // console.log('PREVIOUS after: ', this.state);
     }
   }
@@ -89,9 +99,19 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <button type="button" onClick={this.clickPrevious.bind(this )}>Previous</button>
-        <button type="button" onClick={this.clickNext.bind(this)}>Next</button>
-        <LaunchList currentLaunch={this.state.currentLaunch} />
+        <div>
+          <p>Show me:</p>
+          <button type="button" onClick={this.clickFalcon.bind(this)}>FALCONS</button>
+          <button type="button" onClick={this.clickNextNum.bind(this)}>NEXT 5 LAUNCHES</button>
+        </div>
+        <div>
+        <p>Page {this.state.count + 1}</p>
+          <button type="button" onClick={this.clickPrevious.bind(this)}>Previous</button>
+          <button type="button" onClick={this.clickNext.bind(this)}>Next</button>
+        </div>
+        <div>
+          <LaunchListEntry currentLaunch={this.state.currentLaunch} />
+        </div>
       </div>
     )
   }
