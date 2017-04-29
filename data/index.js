@@ -8,7 +8,7 @@ var Schema = mongoose.Schema;
 var launches = new Schema({
   name: { type: String, unique: true },
   starttime: { type: Date },
-  videourl: { type: String },
+  embedurl: { type: String },
   location: { type: String },
   agency: { type: String },
   description: { type: String }
