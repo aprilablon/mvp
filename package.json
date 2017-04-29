@@ -22,10 +22,12 @@
     "body-parser": "^1.17.1",
     "express": "^4.15.0",
     "jquery": "^3.1.1",
+    "moment-timezone": "^0.5.13",
     "mongoose": "^4.8.6",
     "path": "^0.12.7",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
+    "react-moment": "^0.2.2",
     "request": "^2.81.0"
   }
 }
