@@ -10,6 +10,7 @@ var launches = new Schema({
   starttime: { type: Date },
   embedurl: { type: String },
   location: { type: String },
+  map: { type: String },
   agency: { type: String },
   description: { type: String }
 })
