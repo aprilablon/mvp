@@ -91,7 +91,7 @@ app.get('/launches/falcon', function(req, res) {
   })
 });
 
-app.get('/launches/next/5', function(req, res) {
+app.get('/launches/next', function(req, res) {
 
   var query = db.find();
 
