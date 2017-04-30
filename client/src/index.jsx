@@ -100,28 +100,27 @@ class App extends React.Component {
   render() {
     if (this.state.landingPage) {
       return (
-        <div className="centered-text">
+        <div className="centered-text landing-page">
           <p>Show me:</p>
           <div>
-            <button type="button" onClick={this.clickFalcon.bind(this)}>FALCONS</button>
-            <button type="button" onClick={this.clickNextNum.bind(this)}>NEXT LAUNCHES</button>
+            <img width="400" height="600" title="Past SpaceX Falcon Launches" src="https://upload.wikimedia.org/wikipedia/commons/3/39/Brown-Falcon%2C-Vic%2C-3.1.2008.jpg" onClick={this.clickFalcon.bind(this)}></img>
+            <img width="400" height="600" title="Future Rocket Launches" src="https://www.nasa.gov/images/content/541922main_atlasvcloseup.jpg" onClick={this.clickNextNum.bind(this)}></img>
           </div>
         </div>
       )
     }
     return (
-      <div className="centered-text">
-        <p>Show me:</p>
+      <div className="centered-text launch-item">
         <div>
-          <button type="button" onClick={this.clickFalcon.bind(this)}>FALCONS</button>
-          <button type="button" onClick={this.clickNextNum.bind(this)}>NEXT LAUNCHES</button>
+          <img width="50" height="50" title="Past SpaceX Falcon Launches" src="https://image.flaticon.com/icons/png/512/86/86572.png" onClick={this.clickFalcon.bind(this)}></img>
+          <img width="50" height="50" title="Future Rocket Launches" src="http://simpleicon.com/wp-content/uploads/rocket.png" onClick={this.clickNextNum.bind(this)}></img>
         </div>
-        <p>Page: {this.state.count + 1}</p>
-        <p>Number of Launches: {this.state.launches.length}</p>
         <div>
           <button type="button" onClick={this.clickPrevious.bind(this)}>Previous</button>
           <button type="button" onClick={this.clickNext.bind(this)}>Next</button>
         </div>
+        <p>Page: {this.state.count + 1}</p>
+        <p>Number of Launches: {this.state.launches.length}</p>
         <div>
           <LaunchListEntry currentLaunch={this.state.currentLaunch} />
         </div>
@@ -135,3 +134,5 @@ ReactDOM.render(<App />, document.getElementById('app'));
 
 
         // <LaunchList launches={this.state.launches} />
+          // <button type="button" onClick={this.clickFalcon.bind(this)}>FALCONS</button>
+          // <button type="button" onClick={this.clickNextNum.bind(this)}>NEXT LAUNCHES</button>
