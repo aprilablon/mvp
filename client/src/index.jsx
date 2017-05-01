@@ -13,7 +13,9 @@ class App extends React.Component {
       count: 0,
       launches: [],
       currentLaunch: {},
-      landingPage: true
+      landingPage: true,
+      noFavorites: false,
+      saved: 0
     }
   }
 
@@ -65,26 +67,28 @@ class App extends React.Component {
   }
 
   setLaunchData(data) {
-    this.setState({
-      count: 0,
-      launches: data,
-      currentLaunch: data[0]
-    })
+    if (data.length === 0) {
+      this.setState({
+        noFavorites: true
+      })
+    } else {
+      this.setState({
+        count: 0,
+        launches: data,
+        currentLaunch: data[0],
+        landingPage: false,
+        noFavorites: false
+      })
+    }
   }
 
   clickFalcon(event) {
     this.postLaunchData(this.setLaunchData.bind(this), 'falcon');
-    this.setState({
-      landingPage: false
-    })
   }
 
   clickNextNum(event) {
     var number = prompt("How many future launches do you wanna see?");
     this.postLaunchData(this.setLaunchData.bind(this), `next/${number}`);
-    this.setState({
-      landingPage: false
-    })
   }
 
   clickNext(event) {
@@ -136,8 +140,16 @@ class App extends React.Component {
     })
   }
 
+  numberOfFavorites(list) {
+    this.setState({
+      saved: list.length
+    })
+  }
+
   clickSave(event) {
     this.postSavedLaunchData();
+    this.getSavedLaunchData(this.numberOfFavorites.bind(this));
+    alert('Saved!');
   }
 
   clickSavedItems(event) {
@@ -148,14 +160,22 @@ class App extends React.Component {
     if (this.state.landingPage) {
       return (
         <div className="centered-text landing-page">
-          <p>Show me:</p>
-          <div>
-            <img width="400" height="600" title="Past SpaceX Falcon Launches" src="https://upload.wikimedia.org/wikipedia/commons/3/39/Brown-Falcon%2C-Vic%2C-3.1.2008.jpg" onClick={this.clickFalcon.bind(this)}></img>
-            <img width="400" height="600" title="Future Rocket Launches" src="https://www.nasa.gov/images/content/541922main_atlasvcloseup.jpg" onClick={this.clickNextNum.bind(this)}></img>
-          </div>
+          <button className="falcon-button" onClick={this.clickFalcon.bind(this)}>Past Falcon Launches</button>
+          <button className="future-button" onClick={this.clickNextNum.bind(this)}>Future Launches</button>
         </div>
       )
-    }
+    } else if (this.state.noFavorites) {
+      return (
+        <div className="centered-text launch-item">
+          <div>
+            <img width="50" height="50" title="Past SpaceX Falcon Launches" src="https://image.flaticon.com/icons/png/512/86/86572.png" onClick={this.clickFalcon.bind(this)}></img>
+            <img width="50" height="50" title="Future Rocket Launches" src="http://simpleicon.com/wp-content/uploads/rocket.png" onClick={this.clickNextNum.bind(this)}></img>
+            <img width="50" height="50" title="My Saved Launches" src="https://image.freepik.com/free-icon/ice-cream_318-63065.jpg" onClick={this.clickSavedItems.bind(this)}></img>
+          </div>
+          <h1>You don't have any favorites</h1>
+        </div>
+      )
+    } 
     return (
       <div className="centered-text launch-item">
         <div>
@@ -170,6 +190,7 @@ class App extends React.Component {
         </div>
         <p>Page: {this.state.count + 1}</p>
         <p>Number of Launches: {this.state.launches.length}</p>
+        <p>Saved Launches: {this.state.saved}</p>
         <div>
           <LaunchListEntry currentLaunch={this.state.currentLaunch} />
         </div>
