@@ -17,6 +17,19 @@ class App extends React.Component {
     }
   }
 
+  componentDidMount() {
+    $.ajax({
+      type: 'POST',
+      url: 'http://127.0.0.1:3000/',
+      success: function() {
+        console.log('Successful POST request - refresh and clear favorites');
+      },
+      error: function() {
+        console.log('Bad POST request - favorites not cleared');
+      }
+    })
+  }
+
   postLaunchData(callback, query) {
     var context = this;
 
@@ -26,27 +39,27 @@ class App extends React.Component {
       data: JSON.stringify({ query }),
       contentType: 'application/json',
       success: function() {
-        console.log('Successful POST request');
+        console.log('Successful POST request - stored launch data');
         context.getLaunchData(callback, query);
       },
       error: function() {
-        console.log('Bad POST request');
+        console.log('Bad POST request - unable to store launch data');
       }
     })
   }
 
   getLaunchData(callback, query) {
     var path = query.split('/')[0];
-    // console.log('GET path: ', path);
+
     $.ajax({
       type: 'GET',
       url: `http://127.0.0.1:3000/launches/${path}`,
       success: function(data) {
-        console.log('Successful GET request');
+        console.log('Successful GET request - retrieved launch data');
         callback(data);
       },
       error: function() {
-        console.log('Bad GET request');
+        console.log('Bad GET request - unable to retrieve launches');
       }
     })
   }
@@ -57,7 +70,6 @@ class App extends React.Component {
       launches: data,
       currentLaunch: data[0]
     })
-    // console.log('SET state: ', this.state);
   }
 
   clickFalcon(event) {
@@ -65,7 +77,6 @@ class App extends React.Component {
     this.setState({
       landingPage: false
     })
-    // console.log('FALCON state: ', this.state);
   }
 
   clickNextNum(event) {
@@ -74,7 +85,6 @@ class App extends React.Component {
     this.setState({
       landingPage: false
     })
-    // console.log('NEXT NUM state: ', this.state);
   }
 
   clickNext(event) {
@@ -97,6 +107,43 @@ class App extends React.Component {
     }
   }
 
+  postSavedLaunchData() {
+    $.ajax({
+      type: 'POST',
+      url: 'http://127.0.0.1:3000/save',
+      data: JSON.stringify({ launch: this.state.currentLaunch }),
+      contentType: 'application/json',
+      success: function(data) {
+        console.log('Successful POST request - favorite saved');
+      },
+      error: function() {
+        console.log('Bad POST request - favorite not saved');
+      }
+    })
+  }
+
+  getSavedLaunchData(callback) {
+    $.ajax({
+      type: 'GET',
+      url: 'http://127.0.0.1:3000/favorites',
+      success: function(data) {
+        console.log('Successful GET request - retrieved favorites');
+        callback(data);
+      },
+      error: function() {
+        console.log('Bad GET request - unable to retrieve favorites');
+      }
+    })
+  }
+
+  clickSave(event) {
+    this.postSavedLaunchData();
+  }
+
+  clickSavedItems(event) {
+    this.getSavedLaunchData(this.setLaunchData.bind(this));
+  }
+
   render() {
     if (this.state.landingPage) {
       return (
@@ -114,10 +161,12 @@ class App extends React.Component {
         <div>
           <img width="50" height="50" title="Past SpaceX Falcon Launches" src="https://image.flaticon.com/icons/png/512/86/86572.png" onClick={this.clickFalcon.bind(this)}></img>
           <img width="50" height="50" title="Future Rocket Launches" src="http://simpleicon.com/wp-content/uploads/rocket.png" onClick={this.clickNextNum.bind(this)}></img>
+          <img width="50" height="50" title="My Saved Launches" src="https://image.freepik.com/free-icon/ice-cream_318-63065.jpg" onClick={this.clickSavedItems.bind(this)}></img>
         </div>
         <div>
           <button type="button" onClick={this.clickPrevious.bind(this)}>Previous</button>
           <button type="button" onClick={this.clickNext.bind(this)}>Next</button>
+          <button type="button" onClick={this.clickSave.bind(this)}>Save</button>
         </div>
         <p>Page: {this.state.count + 1}</p>
         <p>Number of Launches: {this.state.launches.length}</p>
