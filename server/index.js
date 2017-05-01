@@ -11,17 +11,22 @@ var app = express();
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/../client/dist'));
 
-app.get('', function(req, res) {
-  AIzaSyB5J6UIl5j3F01QdwCN01ow7BtMY9OqVjY
+app.post('/', function(req, res) {
+  db.favorites.remove({}, function(err) {
+    if (err) {
+      console.log('Failed to drop favorites database')
+    }
+  })
+
+  res.sendStatus(201);
 })
 
 app.post('/launches', function(req, res) {
+  console.log('Starting LAUNCH POST request... ', req.body);
 
-  console.log('Starting POST request... ', req.body);
-
-  db.remove({}, function(err) {
+  db.launches.remove({}, function(err) {
     if (err) {
-      console.log('Failed to drop database');
+      console.log('Failed to drop launches database');
     }
   })
 
@@ -65,7 +70,7 @@ app.post('/launches', function(req, res) {
 
       var map = `https://www.google.com/maps/embed/v1/place?key=AIzaSyB5J6UIl5j3F01QdwCN01ow7BtMY9OqVjY&q=${mapsQuery}`
 
-      var launchInstance = new db({
+      var launchInstance = new db.launches({
         name: data[i].name,
         starttime: data[i].windowstart,
         embedurl: embedurl,
@@ -88,13 +93,13 @@ app.post('/launches', function(req, res) {
 
 app.get('/launches/falcon', function(req, res) {
 
-  var query = db.find();
+  var query = db.launches.find();
 
   query.sort({ starttime: -1 });
 
   query.exec(function(err, data) {
     if (err) {
-      console.log('Error in reading from database: ', err);
+      console.log('FALCON - Error in reading from database: ', err);
       throw err;
     }
     res.send(data);
@@ -102,14 +107,13 @@ app.get('/launches/falcon', function(req, res) {
 });
 
 app.get('/launches/next', function(req, res) {
-
-  var query = db.find();
+  var query = db.launches.find();
 
   query.sort({ starttime: 1 });
 
   query.exec(function(err, data) {
     if (err) {
-      console.log('Error in reading from database: ', err);
+      console.log('NEXT - Error in reading from database: ', err);
       throw err;
     }
     res.send(data);
@@ -120,6 +124,42 @@ app.get('/styles.css', function(req, res) {
   fs.readFile('styles.css', function(err, data) {
     if (err) {
       console.log('Error in reading CSS file: ', err);
+      throw err;
+    }
+    res.send(data);
+  })
+});
+
+app.post('/save', function(req, res) {
+  var launch = req.body.launch;
+
+  var favsInstance = new db.favorites({
+    name: launch.name,
+    starttime: launch.starttime,
+    embedurl: launch.embedurl,
+    location: launch.location,
+    map: launch.map,
+    agency: launch.agency,
+    description: launch.description
+  })
+  
+  favsInstance.save(function(err) {
+    if (err) {
+      console.log('Error in saving - probably duplicates');
+      return;
+    }
+    res.sendStatus(201);
+  })
+});
+
+app.get('/favorites', function(req, res) {
+  var query = db.favorites.find();
+
+  query.sort({ starttime: -1 });
+
+  query.exec(function(err, data) {
+    if (err) {
+      console.log('Unable to query favorites db');
       throw err;
     }
     res.send(data);
