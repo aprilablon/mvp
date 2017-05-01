@@ -15,7 +15,8 @@ class App extends React.Component {
       currentLaunch: {},
       landingPage: true,
       noFavorites: false,
-      saved: 0
+      saved: 0,
+      page: ''
     }
   }
 
@@ -85,7 +86,8 @@ class App extends React.Component {
   clickFalcon(event) {
     this.postLaunchData(this.setLaunchData.bind(this), 'falcon');
     this.setState({
-      onFavourites: false
+      onFavourites: false,
+      page: 'Past Falcon Launches'
     })
   }
 
@@ -93,7 +95,8 @@ class App extends React.Component {
     var number = prompt("How many future launches do you wanna see?");
     this.postLaunchData(this.setLaunchData.bind(this), `next/${number}`);
     this.setState({
-      onFavourites: false
+      onFavourites: false,
+      page: 'Future Launches'
     })
   }
 
@@ -160,6 +163,9 @@ class App extends React.Component {
 
   clickSavedItems(event) {
     this.getSavedLaunchData(this.setLaunchData.bind(this));
+    this.setState({
+      page: 'My Favorite Launches'
+    })
   }
 
   render() {
@@ -190,6 +196,7 @@ class App extends React.Component {
           <img width="50" height="50" title="Future Rocket Launches" src="http://simpleicon.com/wp-content/uploads/rocket.png" onClick={this.clickNextNum.bind(this)}></img>
           <img width="50" height="50" title="My Saved Launches" src="https://image.freepik.com/free-icon/ice-cream_318-63065.jpg" onClick={this.clickSavedItems.bind(this)}></img>
         </div>
+        <h1>{this.state.page}</h1>
         <div>
           <button type="button" onClick={this.clickPrevious.bind(this)}>Previous</button>
           <button type="button" onClick={this.clickNext.bind(this)}>Next</button>
