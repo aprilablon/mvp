@@ -84,11 +84,17 @@ class App extends React.Component {
 
   clickFalcon(event) {
     this.postLaunchData(this.setLaunchData.bind(this), 'falcon');
+    this.setState({
+      onFavourites: false
+    })
   }
 
   clickNextNum(event) {
     var number = prompt("How many future launches do you wanna see?");
     this.postLaunchData(this.setLaunchData.bind(this), `next/${number}`);
+    this.setState({
+      onFavourites: false
+    })
   }
 
   clickNext(event) {
