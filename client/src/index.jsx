@@ -172,13 +172,14 @@ class App extends React.Component {
       )
     } else if (this.state.noFavorites) {
       return (
-        <div className="centered-text launch-item">
+        <div className="centered-text landing-page">
           <div>
             <img width="50" height="50" title="Past SpaceX Falcon Launches" src="https://image.flaticon.com/icons/png/512/86/86572.png" onClick={this.clickFalcon.bind(this)}></img>
             <img width="50" height="50" title="Future Rocket Launches" src="http://simpleicon.com/wp-content/uploads/rocket.png" onClick={this.clickNextNum.bind(this)}></img>
             <img width="50" height="50" title="My Saved Launches" src="https://image.freepik.com/free-icon/ice-cream_318-63065.jpg" onClick={this.clickSavedItems.bind(this)}></img>
           </div>
           <h1>You don't have any favorites</h1>
+          <img src="falcon-landing.gif"></img>
         </div>
       )
     } 
@@ -206,9 +207,3 @@ class App extends React.Component {
 }
 
 ReactDOM.render(<App />, document.getElementById('app'));
-        
-
-
-        // <LaunchList launches={this.state.launches} />
-          // <button type="button" onClick={this.clickFalcon.bind(this)}>FALCONS</button>
-          // <button type="button" onClick={this.clickNextNum.bind(this)}>NEXT LAUNCHES</button>
