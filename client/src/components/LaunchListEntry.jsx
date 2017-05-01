@@ -12,7 +12,8 @@ var LaunchListEntry = (props) => (
     <Moment>{props.currentLaunch.starttime}</Moment>
     <div className="location"><h4>Where</h4> {props.currentLaunch.location}</div>
     <iframe width="560" height="315" frameBorder="0" src={props.currentLaunch.map} allowFullScreen></iframe>
-    <div className="description"><h4>Why</h4> {props.currentLaunch.description}</div>
+    <h4>Why</h4>
+    <div className="description">{props.currentLaunch.description}</div>
     <div className="video-url">
       <h4>Livestream</h4>
       <iframe width="560" height="315" src={props.currentLaunch.embedurl} frameBorder="0" allowFullScreen></iframe>
