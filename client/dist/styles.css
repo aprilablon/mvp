@@ -1,0 +1,93 @@
+body {
+  font: 300 16px/22px "Asap", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+button, img {
+  display: inline-block;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 2px;
+  margin-bottom: 15px;
+}
+
+.title {
+  font-size: 40px;
+}
+
+.centered-text {
+  text-align: center;
+}
+
+.launch-item {
+  margin-left: 430px;
+  margin-right: 430px;
+}
+
+#relative-time {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+h4, p {
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+p {
+  display: inline;
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.description {
+  text-align: justify;
+}
+
+.landing-page {
+  font-size: 15px;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.falcon-button {
+  font: 300 16px/22px "Asap", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 30px;
+  font-weight: 500;
+  color: #fff;
+  height: 600px;
+  width: 400px;
+  background-color: #000;
+}
+
+.future-button {
+  font: 300 16px/22px "Asap", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 30px;
+  font-weight: 500;
+  color: #fff;
+  height: 600px;
+  width: 400px;
+  background-color: #000;
+}
+
+.falcon-button:hover {
+  font: 300 16px/22px "Asap", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 30px;
+  font-weight: 500;
+  color: #fff;
+  height: 600px;
+  width: 400px;
+  background-image: url("https://upload.wikimedia.org/wikipedia/commons/3/39/Brown-Falcon%2C-Vic%2C-3.1.2008.jpg");
+  background-size: contain;
+}
+
+.future-button:hover {
+  font: 300 16px/22px "Asap", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 30px;
+  font-weight: 500;
+  color: #fff;
+  height: 600px;
+  width: 400px;
+  background-image: url("https://www.nasa.gov/images/content/541922main_atlasvcloseup.jpg");
+  background-size: cover;
+}
