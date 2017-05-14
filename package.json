@@ -4,6 +4,9 @@
   "description": "Displays the next 5 rocket launch missions",
   "repository": "hrsf76-mvp",
   "main": "index.js",
+  "engines": {
+    "node": ">=6.4.0"
+  },
   "scripts": {
     "react-dev": "webpack -d --watch",
     "server-dev": "nodemon server/index.js",
